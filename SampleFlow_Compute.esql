@@ -1,0 +1,35 @@
+
+
+CREATE COMPUTE MODULE SampleFlow_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+  	 DECLARE result CHARACTER;
+		DECLARE TEXT CHARACTER;
+--		SET TEXT = CAST(ASBITSTREAM(InputRoot.XMLNSC)AS CHARACTER CCSID 1208);
+--		SET OutputRoot.JSON.Data.Result = Encrypt(TEXT,'C:\\Users\\Raja\\Downloads\\lcodefunction\\lcodefunction\\ESBKeys\\esbkblpublic.cer','C:\\Users\\Raja\\Downloads\\lcodefunction\\lcodefunction\\ESBKeys\\esbkbl.pem'); 
+--		SET Environment.Variables.encrypteddata = SUBSTRING(SUBSTRING(Environment.Variables.Result AFTER 'encrypteddata :')BEFORE ',');
+--		SET Environment.Variables.signature = SUBSTRING(Environment.Variables.Result AFTER 'signature :');
+--		SET OutputRoot.JSON.Data.Result = Environment.Variables.encrypteddata;
+--		SET OutputRoot.JSON.Data.Result =Environment.Variables.signature; 
+		SET Environment.Variables.data = Verify('EYIdUoBlROLjPTyIDV7CKG0Id4wIIjGH4UsE17+HwESXWuJOMK/A7fB2WqadantpSUENJQBoKcTyFvtPlvITZzk3VYJLKYoI3xKkS8CCtMk1Y9oiSpehW6j0Bvn3TSSQ8plyTffyy+w/aTrjy32te332ecBt6QxHRpTzZGFrLEdjzjCgWrdoGO2Iebg0Ld+2UalFkGDQRzh8t6s7EaZ2WyU8BFto3ZbvwiSU5ja3xHAT2zaHVKLnda0NBYTQUGAr0SS7wlpWgVZSNNgmkuBiS45YlKouUy6mmSAhqq81gQ6MZCLxJmeE8S9qiK6DrOP06PrvEKEF2p6hUowTcTIWlW1TwvwrGK3ebE6C+H47JfwsleQgNwJH4Q0leSaVYm3KxG7G4OmKifvG2EfrLLMBHbYuTPhW5FmnZYif5p8YGbkTj+BUv16Sa0scL3pEYOG6ZQNYyViIjIPXC2pSq2Ezjd/furNfefyNbY+f8xZ9KcZ4IEvIwdaxnFammKSudF3FBoYAFzgX43ZHWEPblFsdXZAqpPXNTlSZ9bLZZXzS3AEzCmRhi7o9itfvAGYtnHHNQz0vyVxfS0KqdAfrVC2x1k6pzAVKWPEZfdZoWwAu5RNXnm1SkNb/Y2a+DRHLQLrFmYh7OnLpH1wfq/7mFtuix5BoADpCaNj/yIAhQ8MWpz9FFPVhF61Gzs8SDTlanBBNvHKFrORLszve/uhIXWWZZgTspHRKgaWHN5JLPj9roMZGsa6N9GYLV/p4D56HAfnoTJyEVxhBU7wE7nZi3D4j7ewYkuuGiY2jYWFPVmAgbO25o2oieoNSy7Y+BwTOgyFo96MMTWhDUMjw6ZnTc1PAmVQ4Yh6/vqCPs6ekI4GVHSORR5KlI64CIl7APCMTmDSFM7qxrQcmCpTqshkrL4DGLdEc3hmczvNfKBDNqUY3xgO3mzfcYXO4pX43sl3taJMaDw6bQ1CF1NXkfjNNZhWu3H7tBns/jiNKljqx27pMX/cwUxSbdEj0US9KuQRj2Ez6','of7VCTluDDUTFN/gwRU2MCB+2SNY9j6GWzMtHehfjwcx3yAj8DR4SkQSRKHWQjv7oCqO8KNXaBc1sqeSN7+f3Z12lj9KLVpFxOiPNakYcDeGW+aGY9grkcSZKjNY/V1REg72EMsSCCSx+q+plJZOpLFLhi0Ft2zELl3v8afCMjmHve8eTaof+WDLjbeitujqd2iQIRw991NFmoLTD5O12/FNpr7cQuqbiI/vS3xZrje/9/3MqE+4pKEvCfI60zHtDC1lljg0ZTSUFRMyj6AhjbNM2qBKm3oarbLejzWhRgnYF/G/ti3IA05T9gRO1kDtyvd8zey','C:\\Users\\Raja\\Downloads\\lcodefunction\\lcodefunction\\ESBKeys\\esbkblpublic.cer','C:\\Users\\Raja\\Downloads\\lcodefunction\\lcodefunction\\ESBKeys\\esbkbl.pem');
+		SET result=SUBSTRING(SUBSTRING(Environment.Variables.data AFTER 'verifyvalue :')BEFORE ','); 
+	    SET Environment.Variables.decrypstring=SUBSTRING(Environment.Variables.data  AFTER 'decrypstring :'); 
+	    IF CONTAINS(result,'true') THEN
+	    SET Environment.Variable.data1 = CAST(Environment.Variables.decrypstring AS BIT CCSID 1208 ENCODING 546);
+        CREATE LASTCHILD OF Environment.result DOMAIN('XMLNSC') PARSE(Environment.Variable.data1 CCSID 1208 ENCODING 546);
+        SET OutputRoot.XMLNSC = Environment.result.XMLNSC;	
+	    ELSE
+	    SET OutputRoot.XMLNSC.Result = 'Signature not Verified';
+	    END IF;
+		RETURN TRUE;
+	END;
+END MODULE;
+--CREATE PROCEDURE Encrypt(IN data CHARACTER,IN publickey CHARACTER,IN Privatekey CHARACTER)
+--RETURNS CHARACTER
+--LANGUAGE JAVA
+--EXTERNAL  NAME "Raja.getnsdlrequestData";
+CREATE PROCEDURE Verify(IN data CHARACTER, IN signature CHARACTER, IN Certificate CHARACTER,IN privatekey CHARACTER)
+RETURNS CHARACTER
+LANGUAGE JAVA
+EXTERNAL NAME "Raja1.decryptrequest";
