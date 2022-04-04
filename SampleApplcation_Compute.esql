@@ -4,6 +4,7 @@ CREATE COMPUTE MODULE SampleApplcation_Compute
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
 		SET OutputRoot.JSON.Data = 'Raja';
+		SET OutputRoot.JSON.Data = 'Ravi';
 		RETURN TRUE;
 	END;
 END MODULE;
