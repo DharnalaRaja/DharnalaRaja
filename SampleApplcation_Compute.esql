@@ -1,0 +1,9 @@
+
+
+CREATE COMPUTE MODULE SampleApplcation_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.JSON.Data = 'Raja';
+		RETURN TRUE;
+	END;
+END MODULE;
